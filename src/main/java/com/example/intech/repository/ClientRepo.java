@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ClientRepo extends JpaRepository<Client, Integer> {
+public interface ClientRepo extends JpaRepository<Client, String> {
 }

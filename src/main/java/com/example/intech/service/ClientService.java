@@ -25,4 +25,11 @@ public class ClientService {
         return clientRepo.findAll();
     }
 
+    public Client getClientByUID(String UID){
+        return clientRepo.findById(UID).get();
+    }
+
+    public void updateClient(Client client) {
+        clientRepo.save(client);
+    }
 }

@@ -8,6 +8,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Component
 public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -25,10 +28,21 @@ public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void initData() {
-        Client client = new Client("ivan");
-        clientRepo.save(client);
+        for (int i = 0; i<=10; i++){
+            Client client = new Client("ivan" + i);
+            Set<Content> set = new HashSet<>();
+            for (int j = 0; j<=i; j++) {
+                Content content = new Content("basic" + i + j);
+                set.add(content);
+                contentRepo.save(content);
+            }
+            client.setContents(set);
+            clientRepo.save(client);
 
-        Content content = new Content("basic");
-        contentRepo.save(content);
+        }
+
+        for (int i = 0; i<=10; i++) {
+
+        }
     }
 }

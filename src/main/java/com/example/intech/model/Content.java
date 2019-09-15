@@ -1,11 +1,14 @@
 package com.example.intech.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table (name = "contents")
-public class Content {
+public class Content implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -13,6 +16,9 @@ public class Content {
 
     @Column
     private String name;
+
+    @ManyToMany(mappedBy = "contents")
+    Set<Client> clients = new HashSet<>();
 
     public Content(){}
 
@@ -34,6 +40,14 @@ public class Content {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(Set<Client> clients) {
+        this.clients = clients;
     }
 
     @Override
