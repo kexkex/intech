@@ -5,18 +5,18 @@ import com.example.intech.model.Content;
 import com.example.intech.service.ClientService;
 import com.example.intech.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 public class ClientController {
-    public static final String STATUS_CODE = "status";
-    public static final String DATA = "data";
+    private static final String STATUS_CODE = "status";
+    private static final String DATA = "data";
+    private static final String MESSAGE = "message";
+    private static final String SUCCESS = "success";
+    private static final String ERROR = "error";
     @Autowired
     private ClientService clientService;
     @Autowired
@@ -25,10 +25,16 @@ public class ClientController {
     @RequestMapping(value = "/clients", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> newClient(@RequestBody String name){
         Map<String, Object> response = new HashMap<>();
-        Client client = new Client(name);
+        Client client = new Client(parseBody(name));
         clientService.createClient(client);
         response.put(STATUS_CODE, 200);
-        response.put("uid", client.getUID());
+        Map<String, Object> clientOut = new HashMap<>();
+        clientOut.put("uid", client.getUID());
+        clientOut.put("name", client.getName());
+        clientOut.put("contents", client.getContents());
+        response.put(MESSAGE, SUCCESS);
+        response.put(DATA, clientOut);
+        System.out.println(response.toString());
         return response;
     }
 
@@ -53,8 +59,9 @@ public class ClientController {
             oneClient.put("contents", contentsOut);
             clientsOut.add(oneClient);
         });
+        response.put(MESSAGE, SUCCESS);
         response.put(DATA, clientsOut);
-
+        System.out.println(response.toString());
         return response;
     }
 
@@ -71,11 +78,12 @@ public class ClientController {
                 Map<String, Object> contentsOut = new HashMap<>();
                 contentsOut.put("id", contents.get(page).getId());
                 contentsOut.put("name", contents.get(page).getName());
+                response.put(MESSAGE, SUCCESS);
                 response.put(DATA, contentsOut);
+                System.out.println(response.toString());
                 return response;
             } else {
-                response.put(DATA, null);
-                return response;
+                return badRequest("Out of Contents!");
             }
         } else {
             return badRequest("Not such user found!");
@@ -104,18 +112,20 @@ public class ClientController {
 
     private Boolean validateClient(String uid) {
         Client client = clientService.getClientByUID(uid);
-        if (client != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return client != null;
     }
 
     private Map<String, Object> badRequest(String message){
         Map<String, Object> response = new HashMap<>();
         response.put(STATUS_CODE, 400);
-        response.put(DATA, message);
+        response.put(MESSAGE, message);
+        response.put(DATA, null);
+        System.out.println(response.toString());
         return response;
+    }
+
+    private String parseBody(String s){
+        return s.replaceAll("\"", "");
     }
 
 }

@@ -26,7 +26,7 @@ public class ClientService {
     }
 
     public Client getClientByUID(String UID){
-        return clientRepo.findById(UID).get();
+        return clientRepo.findById(UID).orElse(null);
     }
 
     public void updateClient(Client client) {
