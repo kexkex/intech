@@ -21,6 +21,7 @@ public class ClientService {
         clientRepo.save(client);
     }
 
+    //Not used, only for testing
     public List<Client> getAllClients(){
         return clientRepo.findAll();
     }

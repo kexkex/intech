@@ -38,6 +38,7 @@ public class ClientController {
         return response;
     }
 
+    //Not used, only for testing
     @RequestMapping(value = "/clients", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> getClients(){
         Map<String, Object> response = new HashMap<>();

@@ -21,6 +21,7 @@ public class ContentService {
         contentRepo.save(content);
     }
 
+    //Not used, only for testing
     public List<Content> getAllContents() {
         return contentRepo.findAll();
     }

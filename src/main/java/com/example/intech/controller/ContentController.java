@@ -22,6 +22,7 @@ public class ContentController {
     @Autowired
     private ClientService clientService;
 
+    //Not used, only for testing
     @RequestMapping(value = "/contents", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> getContents(){
         List<Content> contents = contentService.getAllContents();
